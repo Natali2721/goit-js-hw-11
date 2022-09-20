@@ -20,7 +20,9 @@ function onSearch(e) {
   e.preventDefault();
   cartApiService.query = e.currentTarget.elements.searchQuery.value;
   cartApiService.resetPage();
+  resetMarkup(refs.gallery);
   cartApiService.fetchCart().then(appendCardsMarkup);
+  Notiflix.Notify.success('Hooooray! We found 40 perfect images for you.');
 }
 function onLoadMore() {
   cartApiService.fetchCart().then(appendCardsMarkup);
@@ -50,43 +52,9 @@ function appendCardsMarkup(hits) {
     refs.gallery.insertAdjacentHTML('beforeend', markup);
   });
 }
-
-/*
-const countriesListElem = document.querySelector('.country-list');
-const countryInfoElem = document.querySelector('.country-info');
-
-
-function makeMarkupList(countries) {
-  const countriesList = countries.map(country => {
-    return `<li class="country-list__item">
-            <img src=${country.flags.png} width="50" alt="flag">
-            <span class="country-list__name">${country.name.official}</span>
-        </li>`;
-  });
-  countriesList.forEach(markupCountry => {
-    countriesListElem.insertAdjacentHTML('beforeend', markupCountry);
-  });
-}
-
-function makeMarkupInfo(countries) {
-  const country = countries[0];
-  const info = `<div class="country-info__box" alt="flag">
-            <img src=${country.flags.png} width="50">
-            <span class="country-info__name">${country.name.official}</span>
-            </div>
-            <p class="country-text"><span class="country-info--accent">Capital:</span> ${
-              country.capital
-            }</p>
-            <p class="country-text"><span class="country-info--accent">Population:</span> ${
-              country.population
-            }</p>
-            <p class="country-text"><span class="country-info--accent">Languages:</span> ${Object.values(
-              country.languages
-            ).join(', ')}</p>`;
-
-  countryInfoElem.insertAdjacentHTML('beforeend', info);
-}
-function resetMarkup(a, b) {
+function resetMarkup(a) {
   a.innerHTML = '';
-  b.innerHTML = '';
-}*/
+}
+function notifySuccess() {
+  Notiflix.Notify.success('Hooooray! We found 40 perfect images for you.');
+}
