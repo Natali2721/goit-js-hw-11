@@ -7,7 +7,9 @@ export default class CartApiService {
     console.log(this);
     const API_KEY = '30048771-b82027b1d1dd03684fe8fb9c0';
     const BASE_URL = 'https://pixabay.com/api';
-    const url = `${BASE_URL}/?key=${API_KEY}&q=${this.searchQuery}&image_type=photo&language=en&per_page=40&page=${this.page}`;
+    const QUANTITY = 40;
+
+    const url = `${BASE_URL}/?key=${API_KEY}&q=${this.searchQuery}&image_type=photo&orientation=horizontal&safesearch=true&language=en&per_page=${QUANTITY}&page=${this.page}`;
 
     return fetch(url)
       .then(r => r.json())
