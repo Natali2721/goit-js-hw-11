@@ -44,8 +44,6 @@ input {
 }
 
 
-
-/* Article List */
 .gallery {
     display: flex;
    flex-wrap: wrap;
