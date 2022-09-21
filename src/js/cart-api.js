@@ -6,6 +6,7 @@ export default class CartApiService {
   constructor() {
     this.searchQuery = '';
     this.page = 1;
+    this.totalHits = 0;
   }
   fetchCart() {
     console.log(this);
@@ -16,7 +17,8 @@ export default class CartApiService {
       .then(r => r.json())
       .then(data => {
         this.incrementPage();
-        //console.log(data);
+        console.log(data);
+        this.totalHits = data.totalHits;
         return data.hits;
       });
   }
