@@ -32,11 +32,17 @@ input {
 .box {
     background: dodgerblue;
     margin-bottom: 24px;
+    position: fixed;
+    top: 0;
+    z-index: 10;
+    width: 100vw;
+    
 }
 .button {
     display: block;
     margin-left: auto;
     margin-right: auto;
+   
 }
 
 .button.is-hidden {
@@ -45,6 +51,8 @@ input {
 
 
 .gallery {
+   
+    padding-top: 50px;
     display: flex;
    flex-wrap: wrap;
     margin-bottom: 30px;
