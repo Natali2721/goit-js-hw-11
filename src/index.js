@@ -30,13 +30,16 @@ function onSearch(e) {
   cartApiService.resetPage();
   clearGallery(refs.gallery);
   if (cartApiService.query === '') {
+    loadMoreBtn.hide();
     return notifyWarning();
   }
 
   cartApiService.fetchCart().then(hits => {
     console.log(hits);
+
     if (hits.length === 0) {
       return notifyFailure();
+      loadMoreBtn.hide();
     }
     loadMoreBtn.show();
     loadMoreBtn.disable();
@@ -49,6 +52,10 @@ function onSearch(e) {
 function onLoadMore() {
   loadMoreBtn.disable();
   cartApiService.fetchCart().then(hits => {
+    if (hits.length === 0) {
+      loadMoreBtn.hide();
+      return notifyInfo();
+    }
     appendCardsMarkup(hits);
     loadMoreBtn.enable();
   });
@@ -81,8 +88,10 @@ function appendCardsMarkup(hits) {
 function clearGallery(a) {
   a.innerHTML = '';
 }
-function notifySuccess() {
-  Notiflix.Notify.success('Hooooray! We found 40 perfect images for you.');
+function notifySuccess(data) {
+  Notiflix.Notify.success(
+    `Hooooray! We found ${cartApiService.totalHits} perfect images for you.`
+  );
 }
 
 function notifyFailure() {
@@ -92,4 +101,10 @@ function notifyFailure() {
 }
 function notifyWarning() {
   Notiflix.Notify.warning('Please, print something.');
+}
+
+function notifyInfo() {
+  Notiflix.Notify.info(
+    'We`re sorry, but you`ve reached the end of search results.'
+  );
 }
