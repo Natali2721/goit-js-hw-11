@@ -1,5 +1,6 @@
 import Notiflix from 'notiflix';
 import CartApiService from './js/cart-api';
+import LoadMoreBtn from './js/load-more-btn';
 import './css/common.css';
 import SimpleLightbox from 'simplelightbox';
 const axios = require('axios').default;
@@ -10,22 +11,47 @@ const axios = require('axios').default;
 const refs = {
   searchForm: document.querySelector('.search-form'),
   gallery: document.querySelector('.gallery'),
-  loadMoreBtn: document.querySelector('.load-more'),
+  //loadMoreBtn: document.querySelector('.load-more'),
 };
+const loadMoreBtn = new LoadMoreBtn({
+  selector: '.load-more',
+  hidden: true,
+});
 const cartApiService = new CartApiService();
+console.log(loadMoreBtn);
 
 refs.searchForm.addEventListener('submit', onSearch);
-refs.loadMoreBtn.addEventListener('click', onLoadMore);
+//refs.loadMoreBtn.addEventListener('click', onLoadMore);
+loadMoreBtn.refs.button.addEventListener('click', onLoadMore);
+
 function onSearch(e) {
   e.preventDefault();
   cartApiService.query = e.currentTarget.elements.searchQuery.value;
   cartApiService.resetPage();
-  resetMarkup(refs.gallery);
-  cartApiService.fetchCart().then(appendCardsMarkup);
-  Notiflix.Notify.success('Hooooray! We found 40 perfect images for you.');
+  clearGallery(refs.gallery);
+  if (cartApiService.query === '') {
+    return notifyWarning();
+  }
+
+  cartApiService.fetchCart().then(hits => {
+    console.log(hits);
+    if (hits.length === 0) {
+      return notifyFailure();
+    }
+    loadMoreBtn.show();
+    loadMoreBtn.disable();
+    appendCardsMarkup(hits);
+    //Notiflix.Notify.success('Hooooray! We found 40 perfect images for you.');
+    notifySuccess();
+    loadMoreBtn.enable();
+  });
 }
 function onLoadMore() {
-  cartApiService.fetchCart().then(appendCardsMarkup);
+  loadMoreBtn.disable();
+  cartApiService.fetchCart().then(hits => {
+    appendCardsMarkup(hits);
+    loadMoreBtn.enable();
+  });
 }
 function appendCardsMarkup(hits) {
   const cardMarkup = hits.map(hit => {
@@ -52,9 +78,18 @@ function appendCardsMarkup(hits) {
     refs.gallery.insertAdjacentHTML('beforeend', markup);
   });
 }
-function resetMarkup(a) {
+function clearGallery(a) {
   a.innerHTML = '';
 }
 function notifySuccess() {
   Notiflix.Notify.success('Hooooray! We found 40 perfect images for you.');
+}
+
+function notifyFailure() {
+  Notiflix.Notify.failure(
+    'Ooooops. Something wrong. We can`t find this. Try again, please.'
+  );
+}
+function notifyWarning() {
+  Notiflix.Notify.warning('Please, print something.');
 }
