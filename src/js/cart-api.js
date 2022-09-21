@@ -1,3 +1,7 @@
+const API_KEY = '30048771-b82027b1d1dd03684fe8fb9c0';
+const BASE_URL = 'https://pixabay.com/api';
+const QUANTITY = 40;
+
 export default class CartApiService {
   constructor() {
     this.searchQuery = '';
@@ -5,9 +9,6 @@ export default class CartApiService {
   }
   fetchCart() {
     console.log(this);
-    const API_KEY = '30048771-b82027b1d1dd03684fe8fb9c0';
-    const BASE_URL = 'https://pixabay.com/api';
-    const QUANTITY = 40;
 
     const url = `${BASE_URL}/?key=${API_KEY}&q=${this.searchQuery}&image_type=photo&orientation=horizontal&safesearch=true&language=en&per_page=${QUANTITY}&page=${this.page}`;
 
