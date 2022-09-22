@@ -2,7 +2,6 @@ import Notiflix from 'notiflix';
 import CartApiService from './js/cart-api';
 import LoadMoreBtn from './js/load-more-btn';
 import './css/common.css';
-import SimpleLightbox from 'simplelightbox';
 const axios = require('axios').default;
 
 //Your API key: 30048771-b82027b1d1dd03684fe8fb9c0
@@ -18,7 +17,7 @@ const loadMoreBtn = new LoadMoreBtn({
   hidden: true,
 });
 const cartApiService = new CartApiService();
-console.log(loadMoreBtn);
+//console.log(loadMoreBtn);
 
 refs.searchForm.addEventListener('submit', onSearch);
 //refs.loadMoreBtn.addEventListener('click', onLoadMore);
