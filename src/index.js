@@ -1,7 +1,10 @@
+import './css/common.css';
 import Notiflix from 'notiflix';
 import CartApiService from './js/cart-api';
 import LoadMoreBtn from './js/load-more-btn';
-import './css/common.css';
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
+
 const axios = require('axios').default;
 
 //Your API key: 30048771-b82027b1d1dd03684fe8fb9c0
@@ -18,6 +21,10 @@ const loadMoreBtn = new LoadMoreBtn({
 });
 const cartApiService = new CartApiService();
 //console.log(loadMoreBtn);
+const lightBox = new SimpleLightbox('.gallery a', {
+  captionsData: 'alt',
+  captionDelay: '250',
+});
 
 refs.searchForm.addEventListener('submit', onSearch);
 //refs.loadMoreBtn.addEventListener('click', onLoadMore);
@@ -56,14 +63,16 @@ function onLoadMore() {
       return notifyInfo();
     }
     appendCardsMarkup(hits);
+    //lightBox.refresh();
     loadMoreBtn.enable();
   });
 }
 function appendCardsMarkup(hits) {
   const cardMarkup = hits.map(hit => {
-    return `
-    <div class="photo-card">
-  <img class="img" src=${hit.webformatURL} alt=${hit.tags} loading="lazy" />
+    return `<div class="photo-card">
+    <a href="${hit.largeImageURL}">
+    
+  <img class="img" src=${hit.webformatURL} alt=${hit.tags} loading="lazy" /></a>
   <div class="info">
     <p class="info-item">
       <b>Likes</b>${hit.likes}
@@ -77,12 +86,12 @@ function appendCardsMarkup(hits) {
     <p class="info-item">
 <b>Downloads</b>${hit.downloads}
     </p>
-  </div>
-</div>`;
+  </div></div>`;
   });
   cardMarkup.forEach(markup => {
     refs.gallery.insertAdjacentHTML('beforeend', markup);
   });
+  lightBox.refresh();
 }
 function clearGallery(a) {
   a.innerHTML = '';
